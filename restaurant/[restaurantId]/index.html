@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../style.css">
+    <title>Book a Table</title>
+</head>
+<body>
+    <div class="booking-container">
+        <div class="booking-card">
+            <h1 id="restaurantName">Restaurant Name</h1>
+            
+            <!-- Date Picker -->
+            <div class="form-group">
+                <input type="date" id="bookingDate" required>
+                <label for="bookingDate">Select Date</label>
+            </div>
+
+            <!-- Time Slots -->
+            <div class="form-group">
+                <select id="bookingTime" required>
+                    <option value="">Select Time</option>
+                    <option value="17:00">5:00 PM</option>
+                    <option value="17:30">5:30 PM</option>
+                    <option value="18:00">6:00 PM</option>
+                    <option value="18:30">6:30 PM</option>
+                    <option value="19:00">7:00 PM</option>
+                    <option value="19:30">7:30 PM</option>
+                    <option value="20:00">8:00 PM</option>
+                </select>
+                <label for="bookingTime">Select Time</label>
+            </div>
+
+            <!-- Number of Guests -->
+            <div class="form-group">
+                <select id="guests" required>
+                    <option value="">Select Guests</option>
+                    <option value="1">1 Guest</option>
+                    <option value="2">2 Guests</option>
+                    <option value="3">3 Guests</option>
+                    <option value="4">4 Guests</option>
+                    <option value="5">5 Guests</option>
+                    <option value="6">6 Guests</option>
+                    <option value="7">7 Guests</option>
+                    <option value="8">8 Guests</option>
+                    <option value="9">9 Guests</option>
+                    <option value="10">10 Guests</option>
+                </select>
+                <label for="guests">Number of Guests</label>
+            </div>
+
+            <!-- Guest Details Form -->
+            <form id="bookingForm" class="booking-form">
+                <div class="form-group">
+                    <input type="text" id="guestName" required>
+                    <label for="guestName">Full Name</label>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" id="guestEmail" required>
+                    <label for="guestEmail">Email</label>
+                </div>
+
+                <div class="form-group">
+                    <input type="tel" id="guestPhone">
+                    <label for="guestPhone">Phone (Optional)</label>
+                </div>
+
+                <button type="submit" class="primary-btn">Complete Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="booking.js"></script>
+</body>
+</html>

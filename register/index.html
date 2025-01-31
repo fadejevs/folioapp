@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style.css">
     <title>Folio - Get Started</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <nav class="navbar">
         <a href="/" class="logo">Folio.</a>
+        <a href="/login/index.html" class="secondary-btn nav-btn">Login</a>
     </nav>
 
     <main class="register-container">
@@ -16,7 +18,7 @@
             <h1>Get Started with Folio</h1>
             <p class="register-subtitle">Set up your restaurant's booking page in minutes.</p>
             
-            <form class="register-form">
+            <form class="register-form" id="registerForm">
                 <div class="form-group">
                     <input type="text" id="restaurantName" required>
                     <label for="restaurantName">Restaurant Name</label>
@@ -40,5 +42,7 @@
             </p>
         </div>
     </main>
+
+    <script src="register.js"></script>
 </body>
 </html>
