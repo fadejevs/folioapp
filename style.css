@@ -1,9 +1,4 @@
-@font-face {
-    font-family: 'Gilroy';
-    src: url('/fonts/Gilroy-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
     /* Primary colors */
@@ -39,7 +34,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Gilroy', sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 body {
@@ -1182,4 +1177,69 @@ a {
     .login-card {
         padding: 1.5rem;
     }
+}
+
+.dashboard-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.booking-url-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.url-display {
+    display: flex;
+    gap: 1rem;
+}
+
+.url-display input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 2px solid #eee;
+    border-radius: 5px;
+    font-size: 0.875rem;
+}
+
+.booking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.booking-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.booking-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.booking-status.pending {
+    background: #FFF3DC;
+    color: #B25E09;
+}
+
+.booking-status.confirmed {
+    background: #E7F9F0;
+    color: #2AC673;
 }

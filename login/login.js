@@ -1,6 +1,6 @@
 // Initialize Supabase client
-const supabaseUrl = 'YOUR_SUPABASE_URL'
-const supabaseKey = 'YOUR_SUPABASE_KEY'
+const supabaseUrl = 'https://vimymndsowtavwgituuu.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpbXltbmRzb3d0YXZ3Z2l0dXV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgzMjM0NjAsImV4cCI6MjA1Mzg5OTQ2MH0.dRv5cTsegB_ushmNzx-MCJFcUsdkdpngiHjNVWyiRI4'
 const supabase = supabase.createClient(supabaseUrl, supabaseKey)
 
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -17,8 +17,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
         if (error) throw error;
 
+        // Store user session
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
         // Redirect to dashboard
-        window.location.href = '/dashboard';
+        window.location.href = '/dashboard/index.html';
 
     } catch (error) {
         alert(error.message);
