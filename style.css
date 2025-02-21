@@ -1340,3 +1340,17 @@ select {
     background: #E7F9F0;
     color: #2AC673;
 }
+
+/* Add these styles */
+.success-message {
+    text-align: center;
+    padding: 2rem;
+    background: var(--feature-bg-mint);
+    border-radius: 8px;
+    margin-top: 2rem;
+}
+
+.success-message h2 {
+    color: var(--accent-mint);
+    margin-bottom: 1rem;
+}

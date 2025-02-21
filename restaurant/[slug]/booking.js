@@ -21,6 +21,7 @@ async function loadRestaurantInfo() {
             .select('name, id, user_id')
             .eq('slug', slug)
             .single();
+            
 
         if (error) throw error;
 
@@ -48,24 +49,39 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         debug('Form submitted');
         
+        // Add form validation debugging
+        const formData = {
+            date: document.getElementById('bookingDate').value,
+            time: document.getElementById('bookingTime').value,
+            guests: document.getElementById('guests').value,
+            name: document.getElementById('guestName').value,
+            email: document.getElementById('guestEmail').value,
+            phone: document.getElementById('guestPhone').value
+        };
+        debug(`Form data: ${JSON.stringify(formData)}`);
+        
         const submitButton = e.target.querySelector('button[type="submit"]');
         submitButton.disabled = true;
         submitButton.textContent = 'Processing...';
 
         try {
             const restaurant = await loadRestaurantInfo();
-            debug('Got restaurant info');
+            if (!restaurant || !restaurant.id) {
+                throw new Error('Restaurant data not found');
+            }
+            debug(`Restaurant ID: ${restaurant.id}`);
             
             // Create booking
             const bookingData = {
                 restaurant_id: restaurant.id,
-                date: document.getElementById('bookingDate').value,
-                time: document.getElementById('bookingTime').value,
-                guests: parseInt(document.getElementById('guests').value),
-                customer_name: document.getElementById('guestName').value,
-                customer_email: document.getElementById('guestEmail').value,
-                customer_phone: document.getElementById('guestPhone').value || null,
-                status: 'pending'
+                date: formData.date,
+                time: formData.time,
+                guests: parseInt(formData.guests),
+                customer_name: formData.name,
+                customer_email: formData.email,
+                customer_phone: formData.phone || null,
+                status: 'pending',
+                created_at: new Date().toISOString() // Add created_at timestamp
             };
 
             debug(`Creating booking: ${JSON.stringify(bookingData)}`);
@@ -76,12 +92,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 .select()
                 .single();
 
-            if (error) throw error;
+            if (error) {
+                debug(`Supabase error: ${error.message}`);
+                throw error;
+            }
 
-            debug('Booking created successfully');
+            debug(`Booking created: ${JSON.stringify(booking)}`);
             alert(`Booking confirmed!\n\nBooking details:\nDate: ${bookingData.date}\nTime: ${bookingData.time}\nGuests: ${bookingData.guests}`);
 
+            // Clear form after successful booking
             e.target.reset();
+            
+            // Redirect to success page or show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.innerHTML = `
+                <h2>Booking Confirmed!</h2>
+                <p>Thank you for your booking. We'll see you on ${bookingData.date} at ${bookingData.time}.</p>
+            `;
+            form.parentNode.replaceChild(successMessage, form);
+            
         } catch (error) {
             debug(`ERROR: ${error.message}`);
             alert('Failed to create booking. Please try again.');
@@ -90,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submitButton.textContent = 'Complete Booking';
         }
     });
+
 
     // Load restaurant info when page loads
     loadRestaurantInfo();
