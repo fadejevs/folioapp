@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/restaurant/:slug", "destination": "/restaurant/[slug]/index.html" }
+    { "source": "/restaurant/:slug", "destination": "/restaurant/[slug]/index.html" },
+    { "source": "/restaurant/:slug/booking.js", "destination": "/restaurant/[slug]/booking.js" }
   ]
 } 
