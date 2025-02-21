@@ -1,6 +1,8 @@
 {
   "rewrites": [
     { "source": "/restaurant/:slug", "destination": "/restaurant/[slug]/index.html" },
-    { "source": "/restaurant/:slug/booking.js", "destination": "/restaurant/[slug]/booking.js" }
+    { "source": "/restaurant/:slug/booking.js", "destination": "/restaurant/[slug]/booking.js" },
+    { "source": "/style.css", "destination": "/style.css" },
+    { "source": "/fonts/:file", "destination": "/fonts/:file" }
   ]
 } 
