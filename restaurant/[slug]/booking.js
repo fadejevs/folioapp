@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             debug(`Restaurant ID: ${restaurant.id}`);
             
-            // Create booking
+            // Create booking with required fields first
             const bookingData = {
                 restaurant_id: restaurant.id,
                 date: formData.date,
@@ -79,10 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 guests: parseInt(formData.guests),
                 customer_name: formData.name,
                 customer_email: formData.email,
-                customer_phone: formData.phone || null,
-                status: 'pending',
-                created_at: new Date().toISOString() // Add created_at timestamp
+                status: 'pending'
             };
+
+            // Only add phone if provided
+            if (formData.phone) {
+                bookingData.customer_phone = formData.phone;
+            }
 
             debug(`Creating booking: ${JSON.stringify(bookingData)}`);
 
