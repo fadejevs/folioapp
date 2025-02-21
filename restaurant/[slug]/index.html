@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../style.css">
     <title>Book a Table</title>
+    <!-- Load Supabase first -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
 </head>
 <body>
@@ -14,13 +15,14 @@
             
             <form id="bookingForm" class="booking-form">
                 <div class="form-group">
-                    <input type="date" id="bookingDate" required min="">
-                    <label for="bookingDate">Date</label>
+                    <label for="bookingDate">Choose Date</label>
+                    <input type="date" id="bookingDate" required min="" class="date-input">
                 </div>
 
                 <div class="form-group">
+                    <label for="bookingTime">Choose Time</label>
                     <select id="bookingTime" required>
-                        <option value="">Select Time</option>
+                        <option value="">Select a time</option>
                         <option value="17:00">5:00 PM</option>
                         <option value="17:30">5:30 PM</option>
                         <option value="18:00">6:00 PM</option>
@@ -31,7 +33,6 @@
                         <option value="20:30">8:30 PM</option>
                         <option value="21:00">9:00 PM</option>
                     </select>
-                    <label for="bookingTime">Time</label>
                 </div>
 
                 <div class="form-group">
@@ -67,9 +68,22 @@
         </div>
     </div>
 
-    <!-- <script src="../../restaurant/[slug]/booking.js"></script>
-      -->
+    <!-- Debug element -->
+    <div id="debug" style="position: fixed; bottom: 10px; right: 10px; background: #f0f0f0; padding: 10px; display: none;"></div>
 
-      <script src="booking.js"></script>
+    <!-- Load our booking script after the form exists -->
+    <script>
+        // Debug helper
+        function debug(msg) {
+            console.log(msg);
+            const debugEl = document.getElementById('debug');
+            if (debugEl) {
+                debugEl.style.display = 'block';
+                debugEl.innerHTML += `<div>${msg}</div>`;
+            }
+        }
+        debug('Page loaded');
+    </script>
+    <script src="booking.js"></script>
 </body>
 </html> 
