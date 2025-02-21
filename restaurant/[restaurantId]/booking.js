@@ -1,26 +1,26 @@
 // Initialize Supabase
 const supabaseUrl = 'https://vimymndsowtavwgituuu.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpbXltbmRzb3d0YXZ3Z2l0dXV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgzMjM0NjAsImV4cCI6MjA1Mzg5OTQ2MH0.dRv5cTsegB_ushmNzx-MCJFcUsdkdpngiHjNVWyiRI4'
-const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey)
 
 // Set minimum date to today
 document.getElementById('bookingDate').min = new Date().toISOString().split('T')[0];
 
-// Get restaurant info
+// Get restaurant info from URL
 async function loadRestaurantInfo() {
     const slug = window.location.pathname.split('/')[2];
     
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('restaurants')
-            .select('name, id')
+            .select('name, id, user_id')
             .eq('slug', slug)
             .single();
 
         if (error) throw error;
 
         document.getElementById('restaurantName').textContent = `Book a table at ${data.name}`;
-        return data.id;
+        return data;
     } catch (error) {
         console.error('Error loading restaurant:', error);
         alert('Restaurant not found');
@@ -30,15 +30,17 @@ async function loadRestaurantInfo() {
 // Handle booking submission
 document.getElementById('bookingForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-
+    
     const submitButton = e.target.querySelector('button[type="submit"]');
     submitButton.disabled = true;
     submitButton.textContent = 'Processing...';
 
     try {
-        const restaurantId = await loadRestaurantInfo();
+        const restaurant = await loadRestaurantInfo();
+        
+        // Create booking
         const bookingData = {
-            restaurant_id: restaurantId,
+            restaurant_id: restaurant.id,
             date: document.getElementById('bookingDate').value,
             time: document.getElementById('bookingTime').value,
             guests: parseInt(document.getElementById('guests').value),
@@ -48,14 +50,29 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
             status: 'pending'
         };
 
-        const { data, error } = await supabase
+        const { data: booking, error } = await supabaseClient
             .from('bookings')
             .insert([bookingData])
-            .select();
+            .select()
+            .single();
 
         if (error) throw error;
 
-        alert('Booking confirmed! Check your email for details.');
+        // For MVP, just show success message
+        alert(`Booking confirmed!\n\nBooking details:\nDate: ${bookingData.date}\nTime: ${bookingData.time}\nGuests: ${bookingData.guests}`);
+
+        // You could also use a service like EmailJS for client-side emails
+        // https://www.emailjs.com/
+        /*
+        emailjs.send("service_id", "template_id", {
+            to_email: bookingData.customer_email,
+            restaurant_name: restaurant.name,
+            booking_date: bookingData.date,
+            booking_time: bookingData.time,
+            guests: bookingData.guests
+        });
+        */
+
         e.target.reset();
     } catch (error) {
         console.error('Error creating booking:', error);
@@ -66,5 +83,5 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
     }
 });
 
-// Load restaurant info on page load
+// Initialize page
 loadRestaurantInfo();

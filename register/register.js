@@ -72,16 +72,24 @@ try {
                 if (error) throw error;
 
                 // Create restaurant profile
-                const { error: profileError } = await supabaseClient
-                    .from('restaurants')
-                    .insert([{
-                        user_id: data.user.id,
-                        name: restaurantName,
-                        slug: restaurantName.toLowerCase().replace(/\s+/g, '-')
-                    }])
-                    .select();
+                const slug = restaurantName
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with dash
+                    .replace(/^-+|-+$/g, ''); // Remove leading/trailing dashes
 
-                if (profileError) throw profileError;
+                const { data: restaurant, error: restaurantError } = await supabaseClient
+                    .from('restaurants')
+                    .insert([
+                        {
+                            name: restaurantName,
+                            user_id: data.user.id,
+                            slug: `${slug}-${Math.random().toString(36).substring(2, 7)}` // Add random string for uniqueness
+                        }
+                    ])
+                    .select()
+                    .single();
+
+                if (restaurantError) throw restaurantError;
 
                 // Store user session
                 localStorage.setItem('user', JSON.stringify(data.user));
