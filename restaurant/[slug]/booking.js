@@ -71,21 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             debug(`Restaurant ID: ${restaurant.id}`);
             
-            // Create booking with required fields first
+            // Create booking with exact column names matching the database
             const bookingData = {
                 restaurant_id: restaurant.id,
+                customer_name: formData.name,
+                customer_email: formData.email,
+                customer_phone: formData.phone || null,  // Make sure it's null if empty
                 date: formData.date,
                 time: formData.time,
                 guests: parseInt(formData.guests),
-                customer_name: formData.name,
-                customer_email: formData.email,
                 status: 'pending'
             };
-
-            // Only add phone if provided
-            if (formData.phone) {
-                bookingData.customer_phone = formData.phone;
-            }
 
             debug(`Creating booking: ${JSON.stringify(bookingData)}`);
 
@@ -101,20 +97,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             debug(`Booking created: ${JSON.stringify(booking)}`);
-            alert(`Booking confirmed!\n\nBooking details:\nDate: ${bookingData.date}\nTime: ${bookingData.time}\nGuests: ${bookingData.guests}`);
-
-            // Clear form after successful booking
-            e.target.reset();
             
-            // Redirect to success page or show success message
+            // Show success message
             const successMessage = document.createElement('div');
             successMessage.className = 'success-message';
             successMessage.innerHTML = `
                 <h2>Booking Confirmed!</h2>
                 <p>Thank you for your booking. We'll see you on ${bookingData.date} at ${bookingData.time}.</p>
             `;
-            form.parentNode.replaceChild(successMessage, form);
             
+            // Replace form with success message
+            const form = document.getElementById('bookingForm');
+            form.parentNode.replaceChild(successMessage, form);
+
         } catch (error) {
             debug(`ERROR: ${error.message}`);
             alert('Failed to create booking. Please try again.');

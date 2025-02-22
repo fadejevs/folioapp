@@ -4,5 +4,16 @@
     { "source": "/restaurant/:slug/booking.js", "destination": "/restaurant/[slug]/booking.js" },
     { "source": "/style.css", "destination": "/style.css" },
     { "source": "/fonts/:file", "destination": "/fonts/:file" }
+  ],
+  "headers": [
+    {
+      "source": "/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
   ]
 } 
