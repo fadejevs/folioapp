@@ -122,4 +122,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load restaurant info when page loads
     loadRestaurantInfo();
+});
+
+// Check if a time slot is available
+async function checkTimeSlotAvailability(restaurantId, date, time) {
+  try {
+    const { data, error, count } = await supabaseClient
+      .from('bookings')
+      .select('*', { count: 'exact' })
+      .eq('restaurant_id', restaurantId)
+      .eq('date', date)
+      .eq('time', time)
+      .in('status', ['confirmed', 'pending']);
+    
+    if (error) throw error;
+    
+    // For now, assume max 4 bookings per time slot
+    // In a real app, this would come from restaurant settings
+    const MAX_BOOKINGS_PER_SLOT = 4;
+    
+    return {
+      available: count < MAX_BOOKINGS_PER_SLOT,
+      remaining: MAX_BOOKINGS_PER_SLOT - count
+    };
+  } catch (error) {
+    console.error('Error checking availability:', error);
+    return { available: false, error };
+  }
+}
+
+// Update the time slot selection to check availability
+document.getElementById('bookingDate').addEventListener('change', async function() {
+  const date = this.value;
+  const timeSelect = document.getElementById('bookingTime');
+  const restaurant = await loadRestaurantInfo();
+  
+  // Reset options
+  const defaultOption = timeSelect.querySelector('option[value=""]');
+  timeSelect.innerHTML = '';
+  timeSelect.appendChild(defaultOption);
+  
+  // Time slots
+  const timeSlots = [
+    { value: '17:00', label: '5:00 PM' },
+    { value: '17:30', label: '5:30 PM' },
+    { value: '18:00', label: '6:00 PM' },
+    { value: '18:30', label: '6:30 PM' },
+    { value: '19:00', label: '7:00 PM' },
+    { value: '19:30', label: '7:30 PM' },
+    { value: '20:00', label: '8:00 PM' },
+    { value: '20:30', label: '8:30 PM' },
+    { value: '21:00', label: '9:00 PM' }
+  ];
+  
+  // Check availability for each time slot
+  for (const slot of timeSlots) {
+    const { available, remaining } = await checkTimeSlotAvailability(
+      restaurant.id, 
+      date, 
+      slot.value
+    );
+    
+    const option = document.createElement('option');
+    option.value = slot.value;
+    option.textContent = `${slot.label} ${available ? `(${remaining} tables left)` : '(Fully booked)'}`;
+    option.disabled = !available;
+    
+    timeSelect.appendChild(option);
+  }
 }); 

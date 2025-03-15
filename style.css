@@ -1354,3 +1354,95 @@ select {
     color: var(--accent-mint);
     margin-bottom: 1rem;
 }
+
+/* Booking actions */
+.booking-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.confirm-btn, .cancel-btn {
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    border: none;
+}
+
+.confirm-btn {
+    background: var(--feature-bg-mint);
+    color: var(--accent-mint);
+}
+
+.confirm-btn:hover {
+    background: var(--accent-mint);
+    color: white;
+}
+
+.cancel-btn {
+    background: #FEE2E2;
+    color: #EF4444;
+}
+
+.cancel-btn:hover {
+    background: #EF4444;
+    color: white;
+}
+
+.booking-contact {
+    font-size: 0.875rem;
+    color: var(--text-gray);
+}
+
+/* Success message */
+.success-message {
+    text-align: center;
+    padding: 2rem;
+    background: var(--feature-bg-mint);
+    border-radius: 8px;
+    margin-top: 2rem;
+}
+
+.success-message h2 {
+    color: var(--accent-mint);
+    margin-bottom: 1rem;
+}
+
+/* Booking status colors */
+.booking-status.pending {
+    background: #FFF3DC;
+    color: #B25E09;
+}
+
+.booking-status.confirmed {
+    background: #E7F9F0;
+    color: #2AC673;
+}
+
+.booking-status.cancelled {
+    background: #FEE2E2;
+    color: #EF4444;
+}
+
+/* Loading indicator */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-gray);
+}
+
+/* Error message */
+.error {
+    background: #FEE2E2;
+    color: #B91C1C;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.error-details {
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    opacity: 0.8;
+}

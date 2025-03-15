@@ -62,8 +62,15 @@ async function loadRecentBookings() {
                 <strong>${booking.customer_name}</strong>
                 <span>${new Date(booking.date).toLocaleDateString()} at ${booking.time}</span>
                 <span>${booking.guests} guests</span>
+                <span class="booking-contact">${booking.customer_email} ${booking.customer_phone ? `/ ${booking.customer_phone}` : ''}</span>
             </div>
-            <div class="booking-status ${booking.status}">${booking.status}</div>
+            <div class="booking-actions">
+                <div class="booking-status ${booking.status}">${booking.status}</div>
+                ${booking.status === 'pending' ? `
+                    <button class="confirm-btn" data-id="${booking.id}">Confirm</button>
+                    <button class="cancel-btn" data-id="${booking.id}">Cancel</button>
+                ` : ''}
+            </div>
         </div>
     `).join('');
 }
@@ -87,6 +94,58 @@ async function logout() {
     }
 }
 
+// Update booking status
+async function updateBookingStatus(bookingId, status) {
+    try {
+        const { data, error } = await supabaseClient
+            .from('bookings')
+            .update({ status: status })
+            .eq('id', bookingId)
+            .select();
+        
+        if (error) throw error;
+        
+        // Refresh bookings list
+        loadRecentBookings();
+        
+        return { success: true, data };
+    } catch (error) {
+        console.error('Error updating booking:', error);
+        return { success: false, error };
+    }
+}
+
+// Handle booking actions
+function setupBookingActions() {
+    document.addEventListener('click', async (e) => {
+        // Confirm booking
+        if (e.target.classList.contains('confirm-btn')) {
+            const bookingId = e.target.dataset.id;
+            const result = await updateBookingStatus(bookingId, 'confirmed');
+            
+            if (result.success) {
+                alert('Booking confirmed!');
+            } else {
+                alert('Failed to confirm booking. Please try again.');
+            }
+        }
+        
+        // Cancel booking
+        if (e.target.classList.contains('cancel-btn')) {
+            const bookingId = e.target.dataset.id;
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                const result = await updateBookingStatus(bookingId, 'cancelled');
+                
+                if (result.success) {
+                    alert('Booking cancelled.');
+                } else {
+                    alert('Failed to cancel booking. Please try again.');
+                }
+            }
+        }
+    });
+}
+
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
     debug('Dashboard loaded');
@@ -103,5 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
     checkAuth().then(() => {
         loadRestaurantInfo();
         loadRecentBookings();
+        setupBookingActions();
     });
 }); 
